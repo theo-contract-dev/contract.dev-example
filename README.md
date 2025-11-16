@@ -2,7 +2,7 @@
 
 Simple Solidity project for demonstrating contract.dev's capabilities.
 You can list NFTs for sale on marketplace for an amount of ERC20.
-Truly amazing.
+It is truly amazing.
 
 ## Contracts
 
