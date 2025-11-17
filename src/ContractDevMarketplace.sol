@@ -15,7 +15,7 @@ contract ContractDevMarketplace is Ownable {
         bool active;
     }
 
-    string public name = "ContractDevMarketplace";
+    string public version = "2";
 
     mapping(uint256 => Listing) public listings;
     uint256[] public listedTokenIds;
