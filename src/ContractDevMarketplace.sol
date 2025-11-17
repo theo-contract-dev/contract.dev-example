@@ -26,9 +26,13 @@ contract ContractDevMarketplace is Ownable {
     // Total number of NFTs sold
     uint256 public totalNFTsSold;
 
+    // Total fees collected (1% of each sale)
+    uint256 public totalFees;
+
     event NFTListed(uint256 indexed tokenId, address indexed seller, uint256 price);
     event NFTPurchased(uint256 indexed tokenId, address indexed buyer, address indexed seller, uint256 price);
     event ListingCancelled(uint256 indexed tokenId);
+    event FeesWithdrawn(address indexed recipient, uint256 amount);
 
     constructor(address _nft, address _token) Ownable(msg.sender) {
         nft = IERC721(_nft);
@@ -58,8 +62,15 @@ contract ContractDevMarketplace is Ownable {
         uint256 price = listing.price;
         address seller = listing.seller;
 
-        // Transfer token payment from buyer to seller
-        require(token.transferFrom(msg.sender, seller, price), "Token transfer failed");
+        // Calculate 1% fee
+        uint256 fee = price / 100;
+        uint256 sellerAmount = price - fee;
+
+        // Transfer fee to marketplace contract
+        require(token.transferFrom(msg.sender, address(this), fee), "Fee transfer failed");
+        
+        // Transfer remaining amount to seller
+        require(token.transferFrom(msg.sender, seller, sellerAmount), "Token transfer failed");
 
         // Transfer NFT from seller to buyer
         nft.safeTransferFrom(seller, msg.sender, tokenId);
@@ -67,6 +78,7 @@ contract ContractDevMarketplace is Ownable {
         // Update statistics
         totalVolume += price;
         totalNFTsSold++;
+        totalFees += fee;
 
         // Remove listing
         listing.active = false;
@@ -110,6 +122,19 @@ contract ContractDevMarketplace is Ownable {
      */
     function getTotalNumberOfListings() external view returns (uint256) {
         return listedTokenIds.length;
+    }
+
+    /**
+     * @dev Withdraws all accumulated fees from the marketplace contract
+     * Anyone can call this function to withdraw the fees
+     */
+    function withdrawFees() external {
+        uint256 balance = token.balanceOf(address(this));
+        require(balance > 0, "No fees to withdraw");
+        
+        require(token.transfer(msg.sender, balance), "Transfer failed");
+        
+        emit FeesWithdrawn(msg.sender, balance);
     }
 }
 
