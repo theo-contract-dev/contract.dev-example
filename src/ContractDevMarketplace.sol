@@ -20,6 +20,12 @@ contract ContractDevMarketplace is Ownable {
     mapping(uint256 => Listing) public listings;
     uint256[] public listedTokenIds;
 
+    // Total volume in tokens (total amount spent on NFTs)
+    uint256 public totalVolume;
+
+    // Total number of NFTs sold
+    uint256 public totalNFTsSold;
+
     event NFTListed(uint256 indexed tokenId, address indexed seller, uint256 price);
     event NFTPurchased(uint256 indexed tokenId, address indexed buyer, address indexed seller, uint256 price);
     event ListingCancelled(uint256 indexed tokenId);
@@ -58,6 +64,10 @@ contract ContractDevMarketplace is Ownable {
         // Transfer NFT from seller to buyer
         nft.safeTransferFrom(seller, msg.sender, tokenId);
 
+        // Update statistics
+        totalVolume += price;
+        totalNFTsSold++;
+
         // Remove listing
         listing.active = false;
         _removeFromListed(tokenId);
@@ -92,6 +102,14 @@ contract ContractDevMarketplace is Ownable {
 
     function getListing(uint256 tokenId) external view returns (Listing memory) {
         return listings[tokenId];
+    }
+
+    /**
+     * @dev Returns the total number of active listings at the current time
+     * @return The number of active listings
+     */
+    function getTotalNumberOfListings() external view returns (uint256) {
+        return listedTokenIds.length;
     }
 }
 
