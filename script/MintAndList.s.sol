@@ -7,9 +7,9 @@ import {ContractDevMarketplace} from "../src/ContractDevMarketplace.sol";
 
 contract MintAndListScript is Script {
     // Deployed contract addresses
-    address constant MARKETPLACE = 0x927B0660Def01026fc00b12347424742CAC32185;
-    address constant NFT = 0x3E60f2364Ee0c67d6917CfcAF2E6397F6Ee79AC2;
-    address constant ERC20_TOKEN = 0x815B53513B9904c238CeD990194E79320A2095c6;
+    address constant MARKETPLACE = 0x5231E0649C8560A0e3f24fA4ee07F163846b0E2b;
+    address constant NFT = 0x425c59f0B45b51FD2e440BD451110835BA98C623;
+    address constant ERC20_TOKEN = 0xC99208d6866c861BD849Fc13B0e0e916B131d29E;
 
     ContractDevNFT public nftContract;
     ContractDevMarketplace public marketplace;

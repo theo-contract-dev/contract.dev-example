@@ -6,7 +6,7 @@ import {ContractDevToken} from "../src/ContractDevToken.sol";
 
 contract MintAndSendTokenScript is Script {
     // Deployed contract address
-    address constant ERC20_TOKEN = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address constant ERC20_TOKEN = 0xc99208d6866c861bd849fc13b0e0e916b131d29e;
 
     ContractDevToken public tokenContract;
 
